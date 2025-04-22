@@ -1,0 +1,85 @@
+name: Build and test
+on:
+  push:
+    branches: [main, develop]
+
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows, macos, ubuntu]
+        compiler: [gcc, clang, msvc]
+        buildType: [Debug, Release]
+
+        exclude:
+        - os: windows
+          compiler: gcc
+
+        - os: ubuntu
+          compiler: msvc
+
+        - os: macos
+          compiler: msvc
+
+        - os: macos
+          compiler: gcc
+
+    env:
+      C_COMPILER: ${{ matrix.compiler }}
+      CXX_COMPILER: ${{ matrix.compiler == 'gcc' && 'g++' || 'clang++' }}
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: 'recursive'
+
+    - name: Configure (Windows)
+      if: ${{ matrix.os == 'windows' }}
+      run: |
+        if ('${{ matrix.compiler }}' -ne 'msvc') {
+          $env:CC = '${{ env.C_COMPILER }}'
+          $env:CXX = '${{ env.CXX_COMPILER }}'
+        }
+
+        cmake -B ${{runner.workspace}}/build -DCMAKE_BUILD_TYPE=${{ matrix.buildType }} ${{ matrix.compiler != 'msvc' && '-G Ninja' }}
+
+    - name: Configure (Linux/macOS)
+      if: ${{ matrix.os != 'windows' }}
+      run: |
+        export CC='${{ env.C_COMPILER }}'
+        export CXX='${{ env.CXX_COMPILER }}'
+
+        cmake -B ${{runner.workspace}}/build -DCMAKE_BUILD_TYPE=${{ matrix.buildType }} ${{ matrix.compiler != 'msvc' && '-G Ninja' }}
+
+    - name: Build
+      run: cmake --build ${{runner.workspace}}/build --config ${{ matrix.buildType }}
+
+    - name: Test (MSVC)
+      if: ${{ matrix.compiler == 'msvc' }}
+      run: ${{runner.workspace}}/build/bin/${{ matrix.buildType }}/unit_test.exe
+
+    - name: Test (GCC/Clang)
+      if: ${{ matrix.compiler != 'msvc' }}
+      run: ${{runner.workspace}}/build/bin/unit_test${{ matrix.os == 'windows' && '.exe' || '' }}
+
+    - name: Create Artifact (MSVC)
+      if: ${{ matrix.compiler == 'msvc' }}
+      shell: bash
+      run: cp -vr $(echo '${{runner.workspace}}' | tr '\\' '/')/build/bin/${{ matrix.buildType }} $(echo '${{runner.workspace}}' | tr '\\' '/')/build/artifact
+
+    - name: Create Artifact (GCC/Clang)
+      if: ${{ matrix.compiler != 'msvc' }}
+      shell: bash
+      run: cp -vr $(echo '${{runner.workspace}}' | tr '\\' '/')/build/bin $(echo '${{runner.workspace}}' | tr '\\' '/')/build/artifact
+
+    - name: Publish Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: "${{ matrix.os }}-${{ matrix.compiler }}-${{ matrix.buildType == 'Release' && 'release' || 'debug' }}"
+        path: ${{runner.workspace}}/build/artifact
