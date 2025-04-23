@@ -3,7 +3,7 @@
 
 cmake_minimum_required(VERSION 3.21)
 project(
-  cpp-boilerplate
+  sktd
   VERSION 1.0.0
   LANGUAGES CXX
 )
@@ -18,19 +18,17 @@ include(cmake/utils.cmake)
 include(cmake/warnings.cmake)
 
 set(PROJECT_SOURCES
-  source/add.cc
+  source/allocator.cc
+  source/atomic_counter.cc
+  source/result.cc
+  source/string.cc
 )
 
 set(TESTS_SOURCES
-  tests/add_test.cc
 )
 
-add_executable(${PROJECT_NAME})
-
-target_sources(
-  ${PROJECT_NAME} PRIVATE
+add_library(${PROJECT_NAME} STATIC
   ${PROJECT_SOURCES}
-  source/main.cc
 )
 
 target_compile_features(
@@ -46,9 +44,9 @@ target_include_directories(
 setup_libraries(${PROJECT_NAME})
 set_default_warnings(${PROJECT_NAME})
 
-if (BUILD_TESTS)
-  setup_tests(${PROJECT_SOURCES} ${TESTS_SOURCES})
-endif()
+#if (BUILD_TESTS)
+  #setup_tests(${PROJECT_SOURCES} ${TESTS_SOURCES})
+#endif()
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
   find_program(CCACHE_PROGRAM ccache)
@@ -72,7 +70,7 @@ endif()
 
 # Copyright (c) 2025 Lavínia "BinarySkunk" Rodrigues
 #
-# This file is part of cpp-boilerplate and is licensed under the
+# This file is part of sktd and is licensed under the
 # BinarySkunk's Public License (BSPL), version 1, as published by
 # Lavínia "BinarySkunk" Rodrigues.
 #

@@ -1,18 +1,23 @@
 // Copyright (c) 2025 Lavínia "BinarySkunk" Rodrigues
 // See end of file for extended copyright information.
 
-#include <boilerplate/add.hh>
+#include <sktd/build_config.hh>
 
-namespace boilerplate {
+#ifndef SKTD_ATTRIBUTES_HH
+#define SKTD_ATTRIBUTES_HH
 
-auto add(int a, int b) -> int { return a + b; }
+#define SK_NEVER_INLINE __attribute__((noinline))
 
-}  // namespace boilerplate
+#define SK_ALWAYS_INLINE __attribute__((always_inline))
+
+#define SK_PACKED __attribute__((packed))
+
+#endif
 
 /*
  * Copyright (c) 2025 Lavínia "BinarySkunk" Rodrigues
  *
- * This file is part of cpp-boilerplate and is licensed under the
+ * This file is part of sktd and is licensed under the
  * BinarySkunk's Public License (BSPL), version 1, as published by
  * Lavínia "BinarySkunk" Rodrigues.
  *

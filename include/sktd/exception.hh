@@ -1,16 +1,33 @@
 // Copyright (c) 2025 Lavínia "BinarySkunk" Rodrigues
 // See end of file for extended copyright information.
 
-#include <gtest/gtest.h>
+#ifndef SKTD_EXCEPTION_HH
+#define SKTD_EXCEPTION_HH
 
-#include <boilerplate/add.hh>
+#include <sktd/type_aliases.hh>
+#include <sktd/error.hh>
 
-TEST(BoilerplateTest, AddTest) { EXPECT_EQ(boilerplate::add(1, 1), 2); }
+namespace sktd {
+
+template <valid_error E>
+struct program_exception final {
+  const char8* msg{nullptr};
+
+  program_exception() = delete;
+
+  constexpr program_exception(const E& error)
+    : msg{error.msg()}
+  {}
+};
+
+}
+
+#endif
 
 /*
  * Copyright (c) 2025 Lavínia "BinarySkunk" Rodrigues
  *
- * This file is part of cpp-boilerplate and is licensed under the
+ * This file is part of sktd and is licensed under the
  * BinarySkunk's Public License (BSPL), version 1, as published by
  * Lavínia "BinarySkunk" Rodrigues.
  *

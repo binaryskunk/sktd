@@ -39,7 +39,7 @@ endfunction()
 
 # Copyright (c) 2025 Lavínia "BinarySkunk" Rodrigues
 #
-# This file is part of cpp-boilerplate and is licensed under the
+# This file is part of sktd and is licensed under the
 # BinarySkunk's Public License (BSPL), version 1, as published by
 # Lavínia "BinarySkunk" Rodrigues.
 #

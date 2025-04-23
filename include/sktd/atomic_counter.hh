@@ -1,21 +1,38 @@
 // Copyright (c) 2025 Lavínia "BinarySkunk" Rodrigues
 // See end of file for extended copyright information.
 
-#ifndef INCLUDE_BOILERPLATE_ADD_HH_
-#define INCLUDE_BOILERPLATE_ADD_HH_
+#ifndef SKTD_ATOMIC_COUNTER_HH
+#define SKTD_ATOMIC_COUNTER_HH
 
-namespace boilerplate {
+namespace sktd {
+namespace sync {
 
-auto add(int a, int b) -> int;
+template <class T>
+class atomic_counter final {
+private:
+  T _value;
+
+public:
+  atomic_counter(T initial = T{})
+    : _value{initial}
+  {}
+
+  auto increment() -> T;
+
+  auto decrement() -> T;
+
+  auto load() const -> T;
+};
 
 }
+}
 
-#endif  // INCLUDE_BOILERPLATE_ADD_HH_
+#endif
 
 /*
  * Copyright (c) 2025 Lavínia "BinarySkunk" Rodrigues
  *
- * This file is part of cpp-boilerplate and is licensed under the
+ * This file is part of sktd and is licensed under the
  * BinarySkunk's Public License (BSPL), version 1, as published by
  * Lavínia "BinarySkunk" Rodrigues.
  *
