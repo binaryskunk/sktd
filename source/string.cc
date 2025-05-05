@@ -23,7 +23,9 @@ string<Alloc>::string() {
 template <mem::valid_allocator Alloc>
 string<Alloc>::string(const char8* str) {
   usize len = 0;
-  while (str[len]) { len++; }
+  while (str[len]) {
+    len++;
+  }
 
   this->_preallocate(len);
   mem::string_copy(str, this->_data);
@@ -113,7 +115,7 @@ auto string<Alloc>::size() const -> usize {
   return this->_size;
 }
 
-}
+}  // namespace sktd
 
 /*
  * Copyright (c) 2025 Lavínia "BinarySkunk" Rodrigues

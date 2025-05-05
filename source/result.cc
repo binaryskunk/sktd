@@ -107,7 +107,7 @@ constexpr auto result<T, E>::unwrap() -> T& {
   return this->_value;
 }
 
-}
+}  // namespace sktd
 
 /*
  * Copyright (c) 2025 Lavínia "BinarySkunk" Rodrigues

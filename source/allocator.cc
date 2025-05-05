@@ -141,14 +141,13 @@ auto heap_allocator::free(void* ptr) noexcept -> void {
   // binaryskunk: also, this code must be refactored soon TwT
   try {
     ::operator delete(ptr);
-    ptr = nullptr;
   } catch (...) {
     // purposelly no-op
   }
 }
 
-}
-}
+}  // namespace mem
+}  // namespace sktd
 
 /*
  * Copyright (c) 2025 Lavínia "BinarySkunk" Rodrigues

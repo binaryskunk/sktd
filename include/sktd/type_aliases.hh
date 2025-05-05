@@ -16,7 +16,8 @@ using u64 = unsigned long;
 
 using usize = unsigned long;
 
-using char8 = char;
+using c8 = char;
+using char8 = c8;
 
 #endif
 

@@ -18,7 +18,7 @@ constexpr auto move(T&& t) noexcept -> remove_reference_t<T>&& {
   return static_cast<remove_reference_t<T>&&>(t);
 }
 
-}
+}  // namespace sktd
 
 #endif
 

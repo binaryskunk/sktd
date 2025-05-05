@@ -1,8 +1,8 @@
 // Copyright (c) 2025 Lavínia "BinarySkunk" Rodrigues
 // See end of file for extended copyright information.
 
-#ifndef SKTD_STRING_HH
-#define SKTD_STRING_HH
+#ifndef INCLUDE_SKTD_STRING_HH_
+#define INCLUDE_SKTD_STRING_HH_
 
 #include <sktd/type_aliases.hh>
 #include <sktd/allocator.hh>
@@ -11,7 +11,7 @@ namespace sktd {
 
 template <mem::valid_allocator Alloc>
 class string {
-private:
+ private:
   Alloc _allocator{};
 
   char8* _data{nullptr};
@@ -20,17 +20,15 @@ private:
 
   auto _preallocate(usize capacity) -> void;
 
-public:
+ public:
   string();
 
-  string(const char8* str);
+  explicit string(const char8* str);
 
   string(const string& other);
 
   string(string&& other) noexcept
-    : _data{other._data},
-      _size{other._size},
-      _capacity{other._capacity} {
+      : _data{other._data}, _size{other._size}, _capacity{other._capacity} {
     other._data = nullptr;
     other._size = 0;
     other._capacity = 0;
@@ -51,9 +49,9 @@ public:
 
 using heap_string = string<mem::heap_allocator>;
 
-}
+}  // namespace sktd
 
-#endif
+#endif  // INCLUDE_SKTD_STRING_HH_
 
 /*
  * Copyright (c) 2025 Lavínia "BinarySkunk" Rodrigues

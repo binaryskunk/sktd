@@ -11,7 +11,7 @@ namespace sktd {
 namespace mem {
 
 class base_allocator {
-public:
+ public:
   virtual auto alloc(usize n) noexcept -> void* = 0;
 
   virtual auto free(void* ptr) noexcept -> void = 0;
@@ -85,14 +85,14 @@ public:
 */
 
 class heap_allocator final : public base_allocator {
-public:
+ public:
   auto alloc(usize n) noexcept -> void*;
 
   auto free(void* ptr) noexcept -> void;
 };
 
-}
-}
+}  // namespace mem
+}  // namespace sktd
 
 #endif
 

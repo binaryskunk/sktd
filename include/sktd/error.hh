@@ -11,32 +11,28 @@
 namespace sktd {
 
 class base_error {
-public:
+ public:
   constexpr base_error() = default;
 
-  virtual auto msg() -> const char8* = 0;
+  virtual auto what() const -> const char8* = 0;
 };
 
 template <class T>
 concept valid_error = derived_from<base_error, T>;
 
 class assertion_error final : public base_error {
-private:
+ private:
   const char8* _msg;
 
-public:
+ public:
   assertion_error() = delete;
 
-  constexpr assertion_error(const char8* msg)
-    : _msg{msg}
-  {}
+  constexpr explicit assertion_error(const char8* msg) : _msg{msg} {}
 
-  auto msg() -> const char8* {
-    return this->_msg;
-  }
+  auto what() const -> const char8* { return this->_msg; }
 };
 
-}
+}  // namespace sktd
 
 #endif
 

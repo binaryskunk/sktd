@@ -13,18 +13,20 @@
 namespace sktd {
 
 SK_ALWAYS_INLINE inline auto panic([[maybe_unused]] const base_error& error)
-  -> void {
+    -> void {
 #ifdef SK_DEBUG
-  __asm volatile ("ud2");
+  __asm volatile("ud2");
 #else
   throw program_exception{error};
 #endif
 }
 
-}
+}  // namespace sktd
 
-#define sk_assert(cond, msg) \
-  if constexpr (!(cond)) { sktd::panic(assertion_error{msg}); }
+#define sk_assert(cond, msg)           \
+  if constexpr (!(cond)) {             \
+    sktd::panic(assertion_error{msg}); \
+  }
 
 #endif
 

@@ -15,12 +15,10 @@ struct program_exception final {
 
   program_exception() = delete;
 
-  constexpr program_exception(const E& error)
-    : msg{error.msg()}
-  {}
+  constexpr explicit program_exception(const E& error) : msg{error.what()} {}
 };
 
-}
+}  // namespace sktd
 
 #endif
 

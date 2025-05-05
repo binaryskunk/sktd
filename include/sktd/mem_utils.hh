@@ -27,7 +27,7 @@ namespace mem {
 }*/
 
 inline auto copy(const void* from, void* to, usize n) -> void* {
-  bool user_requested_zero_bytes_copy = n <= 0;
+  bool user_requested_zero_bytes_copy = n == 0;
   if (user_requested_zero_bytes_copy) {
     return to;
   }
@@ -60,7 +60,7 @@ inline auto string_size(const char8* str) -> usize {
   }
 
   usize size = 0;
-  while (str[size] && str[size] != '\0') {
+  while (str[size] != '\0') {
     size++;
   }
 
@@ -73,14 +73,12 @@ inline auto string_copy(const char8* from, char8* to) noexcept -> void {
 
   const usize size = min(from_size, to_size);
 
-  copy(reinterpret_cast<const u8*>(from),
-       reinterpret_cast<u8*>(to),
-       size);
+  copy(reinterpret_cast<const u8*>(from), reinterpret_cast<u8*>(to), size);
   to[size] = '\0';
 }
 
-}
-}
+}  // namespace mem
+}  // namespace sktd
 
 #endif
 

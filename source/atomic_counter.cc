@@ -3,6 +3,8 @@
 
 #include <sktd/atomic_counter.hh>
 
+#include <sktd/type_aliases.hh>
+
 namespace sktd {
 namespace sync {
 
@@ -11,10 +13,9 @@ auto atomic_counter<T>::increment() -> T {
 #if defined(__GNUC__) || defined(__clang__)
   return __atomic_add_fetch(&this->_value, 1, __ATOMIC_SEQ_CST);
 #elif defined(_MSC_VER)
-  return _InterlockedIncrement(
-      reinterpret_cast<volatile long*>(&this->_value));
+  return _InterlockedIncrement(reinterpret_cast<volatile i64*>(&this->_value));
 #else
-  #error "unsupported compiler for atomic operations"
+#error "unsupported compiler for atomic operations"
 #endif
 }
 
@@ -23,10 +24,9 @@ auto atomic_counter<T>::decrement() -> T {
 #if defined(__GNUC__) || defined(__clang__)
   return __atomic_sub_fetch(&this->_value, 1, __ATOMIC_SEQ_CST);
 #elif defined(_MSC_VER)
-  return _InterlockedDecrement(
-      reinterpret_cast<volatile long*>(&this->_value));
+  return _InterlockedDecrement(reinterpret_cast<volatile i64*>(&this->_value));
 #else
-  #error "unsupported compiler for atomic operations"
+#error "unsupported compiler for atomic operations"
 #endif
 }
 
@@ -45,12 +45,12 @@ auto atomic_counter<T>::load() const -> T {
 
   return result;
 #else
-  #error "unsupported compiler for atomic operations"
+#error "unsupported compiler for atomic operations"
 #endif
 }
 
-}
-}
+}  // namespace sync
+}  // namespace sktd
 
 /*
  * Copyright (c) 2025 Lavínia "BinarySkunk" Rodrigues

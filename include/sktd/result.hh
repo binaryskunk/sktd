@@ -1,8 +1,8 @@
 // Copyright (c) 2025 Lavínia "BinarySkunk" Rodrigues
 // See end of file for extended copyright information.
 
-#ifndef SKTD_RESULT_HH
-#define SKTD_RESULT_HH
+#ifndef INCLUDE_SKTD_RESULT_HH_
+#define INCLUDE_SKTD_RESULT_HH_
 
 #include <sktd/type_aliases.hh>
 #include <sktd/error.hh>
@@ -21,34 +21,28 @@ inline constexpr error_result_t error_result;
 
 template <valid_error E>
 class bad_result_access final : public base_error {
-private:
+ private:
   E _error;
 
-public:
-  explicit bad_result_access(E error)
-    : _error{move(error)}
-  {}
+ public:
+  explicit bad_result_access(E error) : _error{move(error)} {}
 
   auto msg() const noexcept -> const char8* {
     return "tried to unwrap an error result";
   }
 
-  auto error() const noexcept -> const E& {
-    return this->_error;
-  }
+  auto error() const noexcept -> const E& { return this->_error; }
 
-  auto error() noexcept -> E& {
-    return this->_error;
-  }
+  auto error() noexcept -> E& { return this->_error; }
 };
 
 template <class T, class E>
 class result final {
-public:
+ public:
   using value_type = T;
   using error_type = E;
 
-private:
+ private:
   bool _has_value;
 
   union {
@@ -58,16 +52,14 @@ private:
 
   auto _destroy() -> void;
 
-public:
+ public:
   constexpr result()
-    requires (is_default_constructible_v<T>)
-    : _has_value{true},
-      _value{}
-  {}
+    requires(is_default_constructible_v<T>)
+      : _has_value{true}, _value{} {}
 
   constexpr result(const result& other)
-    requires (is_copy_constructible_v<T> && is_copy_constructible_v<E>)
-    : _has_value{other._has_value} {
+    requires(is_copy_constructible_v<T> && is_copy_constructible_v<E>)
+      : _has_value{other._has_value} {
     if (other._has_value) {
       new (&this->_value) T(other._value);
     } else {
@@ -76,8 +68,8 @@ public:
   }
 
   constexpr result(result&& other)
-    requires (is_move_constructible_v<T> && is_move_constructible_v<E>)
-    : _has_value{other._has_value} {
+    requires(is_move_constructible_v<T> && is_move_constructible_v<E>)
+      : _has_value{other._has_value} {
     if (other._has_value) {
       new (&this->_value) T(move(other._value));
     } else {
@@ -87,20 +79,15 @@ public:
 
   template <class U = T>
   constexpr explicit result(U&& value)
-    requires (!is_same_v<remove_cvref_t<U>, result<T, E>>
-      && !is_same_v<remove_cvref_t<U>, error_result_t>)
-    : _has_value{true},
-      _value{forward<U>(value)}
-  {}
+    requires(!is_same_v<remove_cvref_t<U>, result<T, E>> &&
+             !is_same_v<remove_cvref_t<U>, error_result_t>)
+      : _has_value{true}, _value{forward<U>(value)} {}
 
   template <class... Args>
   constexpr explicit result(error_result_t, Args&&... args)
-    : _has_value{false},
-      _error{forward<Args>(args)...}
-  {}
+      : _has_value{false}, _error{forward<Args>(args)...} {}
 
   ~result();
-
 
   constexpr auto operator=(const result& other) -> result&;
 
@@ -110,9 +97,7 @@ public:
 
   constexpr auto is_err() const noexcept -> bool;
 
-  constexpr explicit operator bool() const noexcept {
-    return this->_has_value;
-  }
+  constexpr explicit operator bool() const noexcept { return this->_has_value; }
 
   constexpr auto unwrap() const -> const T&;
 
@@ -156,7 +141,7 @@ inline constexpr auto make_err(E&& error) {
 template <class T>
 result(T) -> result<T, base_error>;
 
-}
+}  // namespace sktd
 
 #endif
 

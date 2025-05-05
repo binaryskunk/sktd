@@ -1,8 +1,8 @@
 // Copyright (c) 2025 Lavínia "BinarySkunk" Rodrigues
 // See end of file for extended copyright information.
 
-#ifndef SKTD_MIN_MAX_HH
-#define SKTD_MIN_MAX_HH
+#ifndef INCLUDE_SKTD_MIN_MAX_HH_
+#define INCLUDE_SKTD_MIN_MAX_HH_
 
 #include <sktd/attributes.hh>
 
@@ -34,9 +34,9 @@ SK_ALWAYS_INLINE inline constexpr auto max(T a, T b) noexcept -> T {
   return a_is_less_than_or_equal_to_b ? b : a;
 }
 
-}
+}  // namespace sktd
 
-#endif
+#endif  // INCLUDE_SKTD_MIN_MAX_HH_
 
 /*
  * Copyright (c) 2025 Lavínia "BinarySkunk" Rodrigues

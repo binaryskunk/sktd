@@ -1,21 +1,21 @@
 // Copyright (c) 2025 Lavínia "BinarySkunk" Rodrigues
 // See end of file for extended copyright information.
 
-#ifndef SKTD_ATOMIC_COUNTER_HH
-#define SKTD_ATOMIC_COUNTER_HH
+#ifndef INCLUDE_SKTD_ATOMIC_COUNTER_HH_
+#define INCLUDE_SKTD_ATOMIC_COUNTER_HH_
 
 namespace sktd {
 namespace sync {
 
 template <class T>
 class atomic_counter final {
-private:
+ private:
   T _value;
 
-public:
-  atomic_counter(T initial = T{})
-    : _value{initial}
-  {}
+ public:
+  atomic_counter() : _value{T{}} {}
+
+  explicit atomic_counter(T initial) : _value{initial} {}
 
   auto increment() -> T;
 
@@ -24,10 +24,10 @@ public:
   auto load() const -> T;
 };
 
-}
-}
+}  // namespace sync
+}  // namespace sktd
 
-#endif
+#endif  // INCLUDE_SKTD_ATOMIC_COUNTER_HH_
 
 /*
  * Copyright (c) 2025 Lavínia "BinarySkunk" Rodrigues
