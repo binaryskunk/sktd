@@ -63,12 +63,12 @@ jobs:
     - name: Create Artifact (MSVC)
       if: ${{ matrix.compiler == 'msvc' }}
       shell: bash
-      run: cp -vr $(echo '${{runner.workspace}}' | tr '\\' '/')/build/bin/${{ matrix.buildType }} $(echo '${{runner.workspace}}' | tr '\\' '/')/build/artifact
+      run: cp -vr $(echo '${{runner.workspace}}' | tr '\\' '/')/build/lib/${{ matrix.buildType }} $(echo '${{runner.workspace}}' | tr '\\' '/')/build/artifact
 
     - name: Create Artifact (GCC/Clang)
       if: ${{ matrix.compiler != 'msvc' }}
       shell: bash
-      run: cp -vr $(echo '${{runner.workspace}}' | tr '\\' '/')/build/bin $(echo '${{runner.workspace}}' | tr '\\' '/')/build/artifact
+      run: cp -vr $(echo '${{runner.workspace}}' | tr '\\' '/')/build/lib $(echo '${{runner.workspace}}' | tr '\\' '/')/build/artifact
 
     - name: Publish Artifact
       uses: actions/upload-artifact@v4
