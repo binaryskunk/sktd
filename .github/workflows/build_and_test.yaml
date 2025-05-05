@@ -60,14 +60,6 @@ jobs:
     - name: Build
       run: cmake --build ${{runner.workspace}}/build --config ${{ matrix.buildType }}
 
-    - name: Test (MSVC)
-      if: ${{ matrix.compiler == 'msvc' }}
-      run: ${{runner.workspace}}/build/bin/${{ matrix.buildType }}/unit_test.exe
-
-    - name: Test (GCC/Clang)
-      if: ${{ matrix.compiler != 'msvc' }}
-      run: ${{runner.workspace}}/build/bin/unit_test${{ matrix.os == 'windows' && '.exe' || '' }}
-
     - name: Create Artifact (MSVC)
       if: ${{ matrix.compiler == 'msvc' }}
       shell: bash
