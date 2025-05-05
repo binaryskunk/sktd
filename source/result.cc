@@ -3,6 +3,8 @@
 
 #include <sktd/result.hh>
 
+#include <sktd/assert.hh>
+
 namespace sktd {
 
 template <class T, class E>
@@ -92,7 +94,7 @@ constexpr auto result<T, E>::is_err() const noexcept -> bool {
 template <class T, class E>
 constexpr auto result<T, E>::unwrap() const -> const T& {
   if (!this->_has_value) {
-    throw bad_result_access<E>(this->_error);
+    panic(bad_result_access<E>(this->_error));
   }
 
   return this->_value;
@@ -101,7 +103,7 @@ constexpr auto result<T, E>::unwrap() const -> const T& {
 template <class T, class E>
 constexpr auto result<T, E>::unwrap() -> T& {
   if (!this->_has_value) {
-    throw bad_result_access<E>(this->_error);
+    panic(bad_result_access<E>(this->_error));
   }
 
   return this->_value;

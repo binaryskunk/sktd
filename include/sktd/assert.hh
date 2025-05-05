@@ -21,6 +21,16 @@ SK_ALWAYS_INLINE inline auto panic([[maybe_unused]] const base_error& error)
 #endif
 }
 
+template <class T>
+SK_ALWAYS_INLINE inline auto panic(
+    [[maybe_unused]] const program_exception<T>& exception) -> void {
+#ifdef SK_DEBUG
+  __asm volatile("int3");
+#else
+  throw exception;
+#endif
+}
+
 }  // namespace sktd
 
 #define sk_assert(cond, msg)           \
