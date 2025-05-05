@@ -3,6 +3,11 @@
 
 #include <sktd/atomic_counter.hh>
 
+// cppcheck-suppress-begin [missingIncludeSystem]
+#if defined(_MSC_VER)
+#include <intrin.h>
+#endif
+// cppcheck-suppress-end [missingIncludeSystem]
 #include <sktd/type_aliases.hh>
 
 namespace sktd {
