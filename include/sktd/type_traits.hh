@@ -58,8 +58,6 @@ struct remove_cv<const volatile T> {
 template <class T>
 using remove_cv_t = typename remove_cv<T>::type;
 
-namespace {
-
 template <class T, T v>
 struct integral_constant {
   static constexpr T value = v;
@@ -70,8 +68,6 @@ struct integral_constant {
   constexpr operator value_type() const noexcept { return value; }
   constexpr value_type operator()() const noexcept { return value; }
 };
-
-}  // namespace
 
 using true_type = integral_constant<bool, true>;
 using false_type = integral_constant<bool, false>;
@@ -186,6 +182,7 @@ struct is_convertible_helper {
   static auto test(...) -> false_type;
 
   using type = decltype(test<From, To>(0));
+  // cppcheck-suppress unusedStructMember
   static constexpr bool value = type::value;
 };
 
