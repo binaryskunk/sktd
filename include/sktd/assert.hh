@@ -15,7 +15,7 @@ namespace sktd {
 SK_ALWAYS_INLINE inline auto panic([[maybe_unused]] const base_error& error)
     -> void {
 #ifdef SK_DEBUG
-  __asm volatile("ud2");
+  __asm volatile("int3");
 #else
   throw program_exception{error};
 #endif
