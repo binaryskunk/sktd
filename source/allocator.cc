@@ -59,7 +59,9 @@ auto pool_allocator<Allocator, T>::alloc() noexcept
 }
 
 template <valid_allocator Allocator, class T>
-auto pool_allocator<Allocator, T>::free(const T* ptr) noexcept -> void {
+auto pool_allocator<Allocator, T>::free([[maybe_unused]] const T* ptr) noexcept
+    -> void {
+  // TODO(binaryskunk): make free(...) actually turn the pointer into nullptr
   const bool all_capacity_is_free = this->_counter == 0;
   if (!all_capacity_is_free) {
     this->_counter--;
