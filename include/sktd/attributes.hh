@@ -8,7 +8,11 @@
 
 #define SK_NEVER_INLINE __attribute__((noinline))
 
+#if defined(_MSC_VER)
+#define SK_ALWAYS_INLINE __forceinline
+#else
 #define SK_ALWAYS_INLINE __attribute__((always_inline))
+#endif
 
 #define SK_PACKED __attribute__((packed))
 
