@@ -6,6 +6,8 @@
 
 #include <sktd/type_aliases.hh>
 #include <sktd/type_traits.hh>
+#include <sktd/error.hh>
+#include <sktd/result.hh>
 
 namespace sktd {
 namespace mem {
@@ -20,75 +22,43 @@ class base_allocator {
 template <class T>
 concept valid_allocator = derived_from<remove_cvref_t<T>, base_allocator>;
 
-/*namespace internal {
-
-struct memory_block final {
-  void* ptr;
-  usize size;
-  bool is_array;
-
-  memory_block* next;
-};
-
-}
-
-class heap_allocator final : public base_allocator {
-private:
-  internal::memory_block* _blocks_head{nullptr};
-  usize _total_allocated{0};
-  usize _allocation_count{0};
-
-  auto _track_block(internal::memory_block* block) -> void;
-
-  auto _untrack_block(void* ptr) -> bool;
-
-public:
-  // binaryskunk: copy semantics are undesired in a memory allocator, i
-  // think the reason is pretty obvious...
-  heap_allocator(const heap_allocator&) = delete;
-  auto operator=(const heap_allocator&) -> heap_allocator& = delete;
-
-  // binaryskunk: move semantics
-  heap_allocator(heap_allocator&& other) noexcept
-    : _blocks_head{other._blocks_head},
-      _total_allocated{other._total_allocated},
-      _allocation_count{other._allocation_count} {
-    other._blocks_head = nullptr;
-    other._total_allocated = 0;
-    other._allocation_count = 0;
-  }
-  auto operator=(heap_allocator&& other) noexcept -> heap_allocator& {
-    bool assigning_an_allocator_object_to_itself = this == &other;
-    if (assigning_an_allocator_object_to_itself) {
-      // binaryskunk: it would not make sense to move an object's data to
-      // itself
-      return *this;
-    }
-
-    this->_blocks_head = other._blocks_head;
-    this->_total_allocated = other._total_allocated;
-    this->_allocation_count = other._allocation_count;
-
-    other._blocks_head = nullptr;
-    other._total_allocated = 0;
-    other._allocation_count = 0;
-
-    return *this;
-  }
-
-  ~heap_allocator();
-
-  auto alloc(usize n) noexcept -> void*;
-
-  auto free(void* ptr) noexcept -> void;
-};
-*/
-
 class heap_allocator final : public base_allocator {
  public:
   auto alloc(usize n) noexcept -> void*;
 
   auto free(void* ptr) noexcept -> void;
+};
+
+// TODO(binaryskunk): refactor the below class and make it a base class
+// for other pool allocator's error classes
+class pool_allocator_error final : public base_error {
+ private:
+  const char8* _msg;
+
+ public:
+  explicit pool_allocator_error(const char8* msg) : _msg{msg} {}
+
+  auto what() const -> const char8*;
+};
+
+template <valid_allocator Allocator, class T>
+class pool_allocator final {
+ private:
+  T* _pool{nullptr};
+  u64 _capacity{};
+  u64 _counter{};
+  Allocator _allocator{};
+
+ public:
+  explicit pool_allocator(u64 n) : _capacity{n} {
+    this->_pool = this->_allocator.alloc(sizeof(T) * n);
+  }
+
+  ~pool_allocator() { this->_allocator.free(this->_pool); }
+
+  auto alloc() noexcept -> sktd::result<T*, pool_allocator_error>;
+
+  auto free(const T* ptr) noexcept -> void;
 };
 
 }  // namespace mem
