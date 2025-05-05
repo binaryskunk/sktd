@@ -65,7 +65,10 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
   if (NOT APPLE)
     set(SANITIZER_FLAGS ${SANITIZER_FLAGS},leak)
   endif()
-
+  target_compile_options(${PROJECT_NAME} PRIVATE
+    ${SANITIZER_FLAGS})
+  target_link_options(${PROJECT_NAME} PRIVATE
+    ${SANITIZER_FLAGS})
 endif()
 
 # Copyright (c) 2025 Lavínia "BinarySkunk" Rodrigues
