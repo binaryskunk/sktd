@@ -62,7 +62,7 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 
   message(STATUS "Enabling sanitizers ...")
   set(SANITIZER_FLAGS -fno-omit-frame-pointer -fsanitize=address,undefined)
-  if (NOT APPLE)
+  if (NOT APPLE AND NOT WIN32)
     set(SANITIZER_FLAGS ${SANITIZER_FLAGS},leak)
   endif()
   target_compile_options(${PROJECT_NAME} PRIVATE
