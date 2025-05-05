@@ -49,6 +49,8 @@ set_default_warnings(${PROJECT_NAME})
 #endif()
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+  target_compile_definitions(${PROJECT_NAME} PRIVATE SK_DEBUG)
+
   find_program(CCACHE_PROGRAM ccache)
   if (CCACHE_PROGRAM)
     message(STATUS "CCache found !")
